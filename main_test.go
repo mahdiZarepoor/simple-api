@@ -1,4 +1,3 @@
-// main_test.go
 package main_test
 
 import (
@@ -30,9 +29,10 @@ func TestMain(m *testing.M) {
     a.Initialize(
         os.Getenv("APP_DB_USERNAME"),
         os.Getenv("APP_DB_PASSWORD"),
-        os.Getenv("APP_DB_NAME"))
+        os.Getenv("APP_DB_NAME"),
+    )
 
-	// ensure if table we wanna use exist
+	// ensure if table which we wanna use exists
     ensureTableExists()
 
 	code := m.Run()
@@ -48,13 +48,14 @@ func ensureTableExists() {
 
 func clearTable() {
     a.DB.Exec("DELETE FROM products")
-    a.DB.Exec("ALTER SEQUENCE products_id_seq RESTART WITH 1")
+    a.DB.Exec("ALTER SEQUENCE products_id_seq RESTART WITH 1") 
 }
 
 func TestEmptyTable(t *testing.T) {
     clearTable()
 
     req, _ := http.NewRequest("GET", "/products", nil)
+
     response := executeRequest(req)
 
     checkResponseCode(t, http.StatusOK, response.Code)
@@ -83,7 +84,7 @@ func TestCreateProduct(t *testing.T) {
 
     clearTable()
 
-    var jsonStr = []byte(`{"name":"test product", "price": 11.22}`)
+    var jsonStr = []byte(`{"name":"test product", "price": 11.22}`)   
     req, _ := http.NewRequest("POST", "/product", bytes.NewBuffer(jsonStr)) 
     req.Header.Set("Content-Type", "application/json")
 
@@ -182,8 +183,8 @@ func TestDeleteProduct(t *testing.T) {
 }
 
 func executeRequest(req *http.Request) *httptest.ResponseRecorder {
-    rr := httptest.NewRecorder()
-    a.Router.ServeHTTP(rr, req)
+    rr := httptest.NewRecorder() 
+    a.Router.ServeHTTP(rr, req) 
 
     return rr
 }
@@ -194,4 +195,5 @@ func checkResponseCode(t *testing.T, expected, actual int) {
         t.Errorf("Expected response code %d. Got %d\n", expected, actual)
     }
 }
+
 

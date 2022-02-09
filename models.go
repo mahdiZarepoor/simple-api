@@ -1,5 +1,3 @@
-// model.go
-
 package main
 
 import (
@@ -13,7 +11,8 @@ type product struct {
     Price float64 `json:"price"`
 }
 
-func (p *product) getProduct(db *sql.DB) error {
+func (p *product) getProduct(db *sql.DB) error {  
+    
     return db.QueryRow("SELECT name, price FROM products WHERE id=$1",
         p.ID).Scan(&p.Name, &p.Price)}
 

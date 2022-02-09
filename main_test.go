@@ -8,9 +8,10 @@ import (
 	"net/http/httptest"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 
-	main "github.com/mahdiZarepoor/simple-api"
+	"github.com/mahdiZarepoor/simple-api/handlers"
 )
 
 
@@ -22,7 +23,7 @@ const tableCreationQuery = `CREATE TABLE IF NOT EXISTS products
     CONSTRAINT products_pkey PRIMARY KEY (id)
 )`
 
-var a main.App
+var a handlers.App
 
 func TestMain(m *testing.M) {
 	// connect to db
@@ -59,8 +60,10 @@ func TestEmptyTable(t *testing.T) {
     response := executeRequest(req)
 
     checkResponseCode(t, http.StatusOK, response.Code)
-
-    if body := response.Body.String(); body != "[]" {
+    
+    body := strings.TrimSpace(response.Body.String())
+    if  body != "[]" {
+        log.Println("length of body",len(body))
         t.Errorf("Expected an empty array. Got %s", body)
     }
 }

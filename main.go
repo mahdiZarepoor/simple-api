@@ -1,10 +1,15 @@
 package main
 
-import "os"
+import (
+	"os"
+
+	"github.com/mahdiZarepoor/simple-api/handlers"
+	_ "github.com/mahdiZarepoor/simple-api/handlers"
+)
 
 func main() {
 
-	a := App{} 
+	a := handlers.App{} 
 
 	// before calling os.Getenv we have to set these environment variables 
 	// for our connection to database 
